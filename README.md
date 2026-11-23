@@ -6,8 +6,10 @@ https://github.com/dev-SkyCore/weblarek
 
 Структура проекта:
 - src/ — исходные файлы проекта
-- src/components/ — папка с JS компонентами
+- src/components/ — папка с TypeScript-компонентами приложения
 - src/components/base/ — папка с базовым кодом
+- src/components/models/ — папка с моделями каталога, корзины и покупателя
+- src/components/WebLarekApi.ts — клиент для получения каталога и отправки заказов.
 
 Важные файлы:
 - index.html — HTML-файл главной страницы
