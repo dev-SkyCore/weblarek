@@ -9,7 +9,7 @@ https://github.com/dev-SkyCore/weblarek
 - src/components/ — папка с TypeScript-компонентами приложения
 - src/components/base/ — папка с базовым кодом
 - src/components/models/ — папка с моделями каталога, корзины и покупателя
-- src/components/WebLarekApi.ts — клиент для получения каталога и отправки заказов.
+- src/components/WebLarekApi.ts — клиент для получения каталога и отправки заказов
 
 Важные файлы:
 - index.html — HTML-файл главной страницы
