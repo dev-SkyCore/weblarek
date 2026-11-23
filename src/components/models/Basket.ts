@@ -8,15 +8,15 @@ export class Basket {
   }
 
   addItem(product: IProduct): void {
-    if (product.price === null || this.hasItem(product.id)) {
+    if (this.hasItem(product.id)) {
       return;
     }
 
     this.items.push(product);
   }
 
-  removeItem(product: IProduct): void {
-    this.items = this.items.filter((item) => item.id !== product.id);
+  removeItem(id: string): void {
+    this.items = this.items.filter((item) => item.id !== id);
   }
 
   clear(): void {

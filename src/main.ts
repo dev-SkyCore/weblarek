@@ -42,7 +42,7 @@ console.log('Общая стоимость:', basket.getTotal());
 console.log('Первый товар в корзине:', basket.hasItem(firstProduct.id));
 console.log('Товар без цены в корзине:', basket.hasItem(unavailableProduct.id));
 
-basket.removeItem(firstProduct);
+basket.removeItem(firstProduct.id);
 console.log('Товары после удаления первого:', basket.getItems());
 console.log('Первый товар после удаления:', basket.hasItem(firstProduct.id));
 

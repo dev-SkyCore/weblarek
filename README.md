@@ -134,10 +134,10 @@ export interface IProduct {
 Интерфейс `IBuyer` описывает данные покупателя для оформления заказа.
 
 ```typescript
-export type TPayment = 'card' | 'cash' | '';
+export type TPayment = 'card' | 'cash';
 
 export interface IBuyer {
-  payment: TPayment;
+  payment: TPayment | null;
   email: string;
   phone: string;
   address: string;
@@ -146,7 +146,7 @@ export interface IBuyer {
 export type BuyerErrors = Partial<Record<keyof IBuyer, string>>;
 ```
 
-- `payment` — способ оплаты. `'card'` означает оплату онлайн, `'cash'` — оплату при получении, `''` — способ ещё не выбран.
+- `payment` — способ оплаты. `'card'` означает оплату онлайн, `'cash'` — оплату при получении. Значение `null` означает, что способ оплаты ещё не выбран.
 - `email` — адрес электронной почты.
 - `phone` — номер телефона.
 - `address` — адрес доставки.
@@ -192,8 +192,8 @@ export type BuyerErrors = Partial<Record<keyof IBuyer, string>>;
 Методы класса:
 
 - `getItems(): IProduct[]` — возвращает новый массив с товарами корзины.
-- `addItem(product: IProduct): void` — добавляет товар, если его цена отличается от `null` и в корзине ещё нет товара с таким `id`.
-- `removeItem(product: IProduct): void` — удаляет товар по `product.id`.
+- `addItem(product: IProduct): void` — добавляет товар, если в корзине ещё нет товара с таким `id`.
+- `removeItem(id: string): void` — удаляет товар из корзины по идентификатору.
 - `clear(): void` — удаляет все товары из корзины.
 - `getTotal(): number` — возвращает сумму цен товаров в корзине. Для пустой корзины возвращает `0`.
 - `getCount(): number` — возвращает количество товаров в корзине.
@@ -205,20 +205,20 @@ export type BuyerErrors = Partial<Record<keyof IBuyer, string>>;
 
 Конструктор:
 
-`new Buyer()` — создаёт модель с пустыми строками во всех полях.
+`new Buyer()` — создаёт модель со значением `null` для способа оплаты и пустыми строками для адреса, телефона и почты.
 
 Поля класса:
 
-- `private payment: TPayment` — выбранный способ оплаты.
+- `private payment: TPayment | null` — хранит выбранный способ оплаты. Начальное значение — `null`.
 - `private address: string` — адрес доставки.
 - `private phone: string` — номер телефона.
 - `private email: string` — адрес электронной почты.
 
 Методы класса:
 
-- `setData(data: Partial<IBuyer>): void` — обновляет поля, для которых переданы значения. Остальные поля сохраняют прежние значения. Например, `setData({ address: 'ул. Лесная, 10' })` меняет только адрес.
+- `setData(data: Partial<IBuyer>): void` — обновляет переданные поля. Пропущенные поля сохраняют прежние значения. Вызов `setData({ payment: null })` сбрасывает выбранный способ оплаты.
 - `getData(): IBuyer` — возвращает новый объект со всеми четырьмя полями покупателя.
-- `clear(): void` — сбрасывает все поля до пустых строк.
+- `clear(): void` — сбрасывает способ оплаты до `null`, а адрес, телефон и почту — до пустых строк.
 - `validate(): BuyerErrors` — проверяет заполненность всех полей. Для адреса, телефона и почты строка из одних пробелов считается пустой. Для каждого незаполненного поля метод возвращает текст ошибки. Если все поля заполнены, возвращает `{}`.
 
 Например, если адрес и телефон заполнены, а способ оплаты и почта ещё не указаны, результат будет таким.
@@ -241,7 +241,7 @@ export interface IProductsResponse {
 }
 
 export interface IOrderRequest extends IBuyer {
-  payment: Exclude<TPayment, ''>;
+  payment: TPayment;
   items: IProduct['id'][];
   total: number;
 }
@@ -271,6 +271,6 @@ export interface IOrderResponse {
 Методы класса:
 
 - `getProducts(): Promise<IProductsResponse>` — выполняет `GET /product/` и возвращает объект ответа с массивом товаров.
-- `createOrder(order: IOrderRequest): Promise<IOrderResponse>` — отправляет переданные данные заказа через `POST /order` и возвращает подтверждение от сервера.
+- `createOrder(order: IOrderRequest): Promise<IOrderResponse>` — отправляет данные заказа через `POST /order/` и возвращает подтверждение от сервера.
 
 При запуске приложения `main.ts` вызывает `getProducts()`, передаёт полученный массив `items` в `Catalog.setProducts()` и выводит сохранённый каталог в консоль.

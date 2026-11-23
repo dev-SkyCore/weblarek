@@ -1,13 +1,15 @@
 import type { BuyerErrors, IBuyer, TPayment } from '../../types';
 
 export class Buyer {
-  private payment: TPayment = '';
+  private payment: TPayment | null = null;
   private address = '';
   private phone = '';
   private email = '';
 
   setData(data: Partial<IBuyer>): void {
-    this.payment = data.payment ?? this.payment;
+    if (data.payment !== undefined) {
+      this.payment = data.payment;
+    }
     this.address = data.address ?? this.address;
     this.phone = data.phone ?? this.phone;
     this.email = data.email ?? this.email;
@@ -23,13 +25,13 @@ export class Buyer {
   }
 
   clear(): void {
-    this.setData({ payment: '', address: '', phone: '', email: '' });
+    this.setData({ payment: null, address: '', phone: '', email: '' });
   }
 
   validate(): BuyerErrors {
     const errors: BuyerErrors = {};
 
-    if (this.payment === '') {
+    if (this.payment === null) {
       errors.payment = 'Выберите способ оплаты';
     }
     if (this.address.trim() === '') {

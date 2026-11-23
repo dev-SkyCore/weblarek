@@ -8,6 +8,6 @@ export class WebLarekApi {
   }
 
   createOrder(order: IOrderRequest): Promise<IOrderResponse> {
-    return this.api.post<IOrderResponse>('/order', order);
+    return this.api.post<IOrderResponse>('/order/', order);
   }
 }
